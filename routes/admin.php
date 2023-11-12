@@ -10,25 +10,25 @@ use App\Http\Controllers\productoController;
 use App\Models\categoria;
 use Illuminate\Support\Facades\Route;
 
-Route::get('',[principalController::class,'index']);
-Route::get('/admin',[principalController::class,'index']);
-Route::prefix('/admin')->group(function(){
-    Route::prefix('cargo')->group(function(){
-        Route::get('',[cargoController::class,'index']);
-    });
-    Route::prefix('distrito')->group(function(){
-        Route::get('',[distritoController::class,'index']);
-    });
-    Route::prefix('empleado')->group(function(){
-        Route::get('',[empleadoController::class,'index']);
-    });
-    Route::prefix('cliente')->group(function(){
-        Route::get('',[clienteController::class,'index']);
-    });
-    Route::prefix('producto')->group(function(){
-        Route::get('',[productoController::class,'index']);
-    });
-    Route::prefix('categoria')->group(function(){
-        Route::get('',[categoriaController::class,'index']);
-    });
+Route::get('', [principalController::class, 'index']);
+Route::get('/admin', [principalController::class, 'index']);
+Route::prefix('/admin/cargo')->group(function () {
+    Route::get('', [cargoController::class, 'index']);
+    Route::get('/create', [cargoController::class, 'create']);
+    Route::post('/insert', [cargoController::class, 'store']);
+});
+Route::prefix('/admin/distrito')->group(function () {
+    Route::get('', [distritoController::class, 'index']);
+});
+Route::prefix('/admin/empleado')->group(function () {
+    Route::get('', [empleadoController::class, 'index']);
+});
+Route::prefix('/admin/cliente')->group(function () {
+    Route::get('', [clienteController::class, 'index']);
+});
+Route::prefix('/admin/producto')->group(function () {
+    Route::get('', [productoController::class, 'index']);
+});
+Route::prefix('/admin/categoria')->group(function () {
+    Route::get('', [categoriaController::class, 'index']);
 });
