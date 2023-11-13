@@ -16,6 +16,7 @@
                 <x-adminlte-input name="cargo" label="Nombre del cargo" type="text" placeholder="Nombre del cargo"/>
 
                 <x-adminlte-button class="btn-flat" type="submit" label="Guardar" theme="primary"/>
+                <a href="{{ url('admin/cargo') }}" class="btn btn-flat btn-danger">Cancelar <i class="fas fa-times"></i></a>
             </form>
         </div>
     </div>

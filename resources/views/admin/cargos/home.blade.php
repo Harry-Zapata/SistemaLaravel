@@ -10,70 +10,28 @@
 @stop
 
 @section('content')
-    {{-- @php
-        $heads = ['ID', 'Nombre del cargo', ['label' => 'Actions', 'width' => 5]];
-        $config = [
-            'order' => [[1, 'asc']],
-            'columns' => [['orderable' => false]],
-        ];
-    @endphp --}}
-
-    {{-- <x-adminlte-datatable id="table1" :heads="$heads" head-theme="dark" :config="$config" striped hoverable with-buttons>
-        @if ($cargo->count() == 0)
-            <tr>
-                <td colspan="3">No hay cargos registrados</td>
-            </tr>
-        @else
-                @foreach ($cargo as $cargo)
-                <tr>
-                    <td>{{ $cargo->id }}</td>
-                    <td>{{ $cargo->nombre_cargo }}</td>
-                    <td>
-                        <nobr>
-                            <button class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
-                                <i class="fa fa-lg fa-fw fa-pen"></i>
-                            </button>
-                            <button class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
-                                <i class="fa fa-lg fa-fw fa-trash"></i>
-                            </button>
-                            <button class="btn btn-xs btn-default text-teal mx-1 shadow" title="Details">
-                                <i class="fa fa-lg fa-fw fa-eye"></i>
-                            </button>
-                        </nobr>
-                    </td>
-                </tr>
-                @endforeach
-        @endif
-    </x-adminlte-datatable> --}}
     @php
         $heads = ['ID', 'Nombre del cargo', ['label' => 'Actions', 'no-export' => true, 'width' => 5]];
 
-        $btnEdit = '<button class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
+        $data = $cargo->toArray();
+        $data = array_map(function ($row){
+            $row[3] = '<nobr>'
+                .'<a class="btn btn-xs btn-default text-primary mx-1 shadow" href="cargo/edit/'.json_encode($row['id']).'" title="Edit">
                     <i class="fa fa-lg fa-fw fa-pen"></i>
-                </button>';
-        $btnDelete = '<button class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
-                      <i class="fa fa-lg fa-fw fa-trash"></i>
-                  </button>';
-        $btnDetails = '<button class="btn btn-xs btn-default text-teal mx-1 shadow" title="Details">
+                </a>'.
+                  '<a class="btn btn-xs btn-default text-teal mx-1 shadow" href="cargo/read/'.json_encode($row['id']).'" title="Details">
                        <i class="fa fa-lg fa-fw fa-eye"></i>
-                   </button>';
-
+                   </a>'.
+                '</nobr>';
+            return $row;
+        }, $data);
         $config = [
-            'data' => [
-                // [
-                //     22,
-                //     'John Bender',
-                //     '+02 (123) 123456789',
-                //     '<nobr>' . $btnEdit . $btnDelete . $btnDetails . '</nobr>'
-                // ]
-            ],
+            'data' => $data,
             'order' => [[1, 'asc']],
             'columns' => [null, null, ['orderable' => false]],
         ];
     @endphp
-
-    {{-- Minimal example / fill data using the component slot --}}
-    <x-adminlte-datatable id="table1" head-theme="dark" :heads="$heads" striped hoverable bordered>
+   <x-adminlte-datatable id="table1" head-theme="dark" :heads="$heads" striped hoverable bordered>
         @foreach ($config['data'] as $row)
             <tr>
                 @foreach ($row as $cell)
@@ -90,5 +48,8 @@
 
 @section('js')
     <script>
+        function verDetalle(event) {
+            console.log(event);
+        }
     </script>
 @stop

@@ -25,6 +25,7 @@ class cargoController extends Controller
         $cargo->nombre_cargo = $request->cargo;
         try {
             $cargo->save();
+            return redirect('admin/cargo')->with('success', 'Cargo created successfully');
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->errorInfo[1] == 1062) { // Check for unique constraint violation
                 return redirect('admin/cargo')->with('error', 'Cargo with the same name already exists');
@@ -35,17 +36,22 @@ class cargoController extends Controller
 
     public function show($id)
     {
-
+        $cargo = cargo::find($id);
+        return view('admin.cargos.read', compact('cargo'));
     }
 
     public function edit($id)
     {
-
+        $cargo = cargo::find($id);
+        return view('admin.cargos.update', compact('cargo'));
     }
 
     public function update(Request $request, $id)
     {
-
+        $cargo = cargo::find($id);
+        $cargo->nombre_cargo = $request->input('nombre_cargo');
+        $cargo->save();
+        return redirect('admin/cargo')->with('success', 'Cargo updated successfully');
     }
 
     public function destroy($id)
