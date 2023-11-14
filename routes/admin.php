@@ -32,13 +32,37 @@ Route::prefix('/admin/distrito')->group(function () {
 });
 Route::prefix('/admin/empleado')->group(function () {
     Route::get('', [empleadoController::class, 'index']);
+    Route::get('/create', [empleadoController::class, 'create']);
+    Route::post('/insert', [empleadoController::class, 'store']);
+    Route::get('/read/{id}', [empleadoController::class, 'show']);
+    Route::get('/edit/{id}', [empleadoController::class, 'edit']);
+    Route::post('/update/{id}', [empleadoController::class, 'update']);
+    Route::get('/delete/{id}', [empleadoController::class, 'destroy']);
 });
 Route::prefix('/admin/cliente')->group(function () {
     Route::get('', [clienteController::class, 'index']);
+    Route::get('/create', [clienteController::class, 'create']);
+    Route::post('/insert', [clienteController::class, 'store']);
+    Route::get('/read/{id}', [clienteController::class, 'show']);
+    Route::get('/edit/{id}', [clienteController::class, 'edit']);
+    Route::post('/update/{id}', [clienteController::class, 'update']);
+    Route::get('/delete/{id}', [clienteController::class, 'destroy']);
 });
 Route::prefix('/admin/producto')->group(function () {
     Route::get('', [productoController::class, 'index']);
+    Route::get('/create', [productoController::class, 'create']);
+    Route::post('/insert', [productoController::class, 'store']);
+    Route::get('/read/{id}', [productoController::class, 'show']);
+    Route::get('/edit/{id}', [productoController::class, 'edit']);
+    Route::post('/update/{id}', [productoController::class, 'update']);
+    Route::get('/delete/{id}', [productoController::class, 'destroy']);
 });
 Route::prefix('/admin/categoria')->group(function () {
     Route::get('', [categoriaController::class, 'index']);
+    Route::get('/create', [categoriaController::class, 'create']);
+    Route::post('/insert', [categoriaController::class, 'store']);
+    Route::get('/read/{id}', [categoriaController::class, 'show']);
+    Route::get('/edit/{id}', [categoriaController::class, 'edit']);
+    Route::post('/update/{id}', [categoriaController::class, 'update']);
+    Route::get('/delete/{id}', [categoriaController::class, 'destroy']);
 });

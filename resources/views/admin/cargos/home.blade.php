@@ -47,9 +47,4 @@
 @stop
 
 @section('js')
-    <script>
-        function verDetalle(event) {
-            console.log(event);
-        }
-    </script>
 @stop
