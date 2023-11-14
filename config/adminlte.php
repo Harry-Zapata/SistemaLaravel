@@ -340,8 +340,13 @@ return [
         [
             'text' => 'Producto',
             'url'  => 'admin/producto',
-            'icon' => 'fas fa-fw fa-shopping-cart',
+            'icon' => 'fas fa-fw fa-box',
         ],
+        [
+            'text' => 'Venta',
+            'url'  => 'admin/venta',
+            'icon' => 'fas fa-fw fa-shopping-cart',
+        ]
     ],
 
     /*

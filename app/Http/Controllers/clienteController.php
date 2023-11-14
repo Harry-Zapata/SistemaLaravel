@@ -9,7 +9,12 @@ class clienteController extends Controller
 {
     public function index()
     {
+        $distrito = distrito::all();
         $cliente = cliente::all();
+        $cliente = $cliente->map(function ($cliente) use ($distrito) {
+            $cliente->id_distrito = $distrito->find($cliente->id_distrito)->nombre_distrito;
+            return $cliente;
+        });
         return view('admin.clientes.home', compact('cliente'));
     }
 

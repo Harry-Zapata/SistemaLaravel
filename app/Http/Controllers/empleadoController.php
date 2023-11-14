@@ -14,6 +14,12 @@ class empleadoController extends Controller
         $empleados = empleado::all();
         $distrito = distrito::all();
         $cargo = cargo::all();
+        //que remplace el id_distrito y el cod_cargo por distrito y cargo
+        $empleados = $empleados->map(function ($empleado) use ($distrito, $cargo) {
+            $empleado->id_distrito = $distrito->find($empleado->id_distrito)->nombre_distrito;
+            $empleado->cod_cargo = $cargo->find($empleado->cod_cargo)->nombre_cargo;
+            return $empleado;
+        });
         return view('admin.empleados.home', compact('empleados', 'distrito', 'cargo'));
     }
 

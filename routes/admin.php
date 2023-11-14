@@ -7,7 +7,7 @@ use App\Http\Controllers\distritoController;
 use App\Http\Controllers\empleadoController;
 use App\Http\Controllers\principalController;
 use App\Http\Controllers\productoController;
-use App\Models\categoria;
+use App\Http\Controllers\ventaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('', [principalController::class, 'index']);

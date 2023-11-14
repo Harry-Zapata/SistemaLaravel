@@ -22,7 +22,7 @@
                 '" title="Edit">
             <i class="fa fa-lg fa-fw fa-pen"></i>
         </a>' .
-                '<a class="btn btn-xs btn-default text-teal mx-1 shadow" href="./read/' .
+                '<a class="btn btn-xs btn-default text-teal mx-1 shadow" href="distrito/read/' .
                 json_encode($row['id']) .
                 '" title="Details">
                <i class="fa fa-lg fa-fw fa-eye"></i>
