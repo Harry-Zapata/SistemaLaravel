@@ -53,6 +53,23 @@
 @stop
 
 @section('js')
-    <script>
-    </script>
+<script>
+    $(document).ready(function() {
+        let table1_info = document.getElementById('table1_info');
+        let array = table1_info.textContent.split(' ');
+        console.log(array);
+        diccionario = {
+            'Showing': 'Mostrando',
+            'to': 'a',
+            'of': 'de',
+            'entries': 'registros',
+        }
+        for (let i = 0; i < array.length; i++) {
+            if (array[i] in diccionario) {
+                array[i] = diccionario[array[i]];
+            }
+        }
+        table1_info.textContent = array.join(' ');
+    })
+</script>
 @stop

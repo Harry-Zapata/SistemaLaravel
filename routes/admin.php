@@ -66,3 +66,11 @@ Route::prefix('/admin/categoria')->group(function () {
     Route::post('/update/{id}', [categoriaController::class, 'update']);
     Route::get('/delete/{id}', [categoriaController::class, 'destroy']);
 });
+Route::prefix('admin/venta')->group(function () {
+    Route::get('', [ventaController::class, 'index']);
+    Route::post('/insert', [ventaController::class, 'store']);
+    Route::get('/insert/{id}', [ventaController::class, 'show']);
+    Route::get('/edit/{id}', [ventaController::class, 'edit']);
+    Route::post('/update/{id}', [ventaController::class, 'update']);
+    Route::get('/delete/{id}', [ventaController::class, 'destroy']);
+});
