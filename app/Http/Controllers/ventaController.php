@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\boleta;
 use App\Models\producto;
 use App\Models\cliente;
+use App\Models\detalleBoleta;
 use App\Models\empleado;
 
 class ventaController extends Controller
@@ -39,7 +40,8 @@ class ventaController extends Controller
         $cliente = cliente::all();
         $empleado = empleado::all();
         $boleta = boleta::find($id);
-        return view('admin.venta.update', compact('boleta', 'producto', 'cliente', 'empleado'));
+        $detalleBoleta = detalleBoleta::where('num_boleta', $boleta->id)->get();
+        return view('admin.venta.update', compact('boleta', 'producto', 'cliente', 'empleado', 'detalleBoleta'));
     }
     public function edit()
     {
