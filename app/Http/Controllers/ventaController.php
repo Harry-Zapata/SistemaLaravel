@@ -52,7 +52,5 @@ class ventaController extends Controller
         $detalleBoleta->precio = $request->input('precio');
         $detalleBoleta->save();
     }
-    public function destroy()
-    {
-    }
+
 }

@@ -6,7 +6,7 @@
     <div class="d-flex justify-content-between">
         <h1>Ventas</h1>
         <div>
-            <span id="num_boleta">Boleta:{{ $boleta->id }}</span><br>
+            <span>Boleta:<span id="num_boleta">{{ $boleta->id }}</span></span><br>
             <span id="stock_actual"></span>
         </div>
     </div>
@@ -14,7 +14,6 @@
 
 @section('content')
     <form>
-        @csrf
         <x-adminlte-select2 name="id_cliente" disabled onchange="mostrarPrecio()" class="col-md-6" label="Cliente"
             igroup-size="lg" data-placeholder="Select an option...">
             <option />
@@ -37,6 +36,7 @@
         </div>
     </form>
     <form class="form-2">
+        @csrf
         <x-adminlte-select2 oninput="mostrarPrecio({{ $producto }})" name="id_producto" label="Producto"
             igroup-size="lg" data-placeholder="Select an option...">
             <option />
@@ -74,7 +74,7 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
+
     <style>
         form {
             display: grid;
@@ -206,9 +206,8 @@
 
         function sumar1(i) {
             let stock_actual = document.getElementById('cantidad_stock').textContent;
-            let cantidad_actual = document.getElementsByName('cantidad')[0].value;
-            if (parseInt(stock_actual) < parseInt(cantidad_actual)) {
-                alert('Solo tenemos' + document.getElementById('cantidad_stock').textContent + 'en stock');
+            if (data[i].cantidad == parseInt(stock_actual)) {
+                alert('Solo tenemos ' + document.getElementById('cantidad_stock').textContent + ' en stock');
                 return;
             }
             data[i].cantidad++;
@@ -217,32 +216,36 @@
         }
 
         function registrar() {
-            //recorrer la data
+            //que espere a que acabe el bucle y que muestre una alerta que se guardaron los datos correctamente
             for (let i = 0; i < data.length; i++) {
                 let element = data[i];
                 registrardata(element);
             }
+            //que redireccione al admin/venta
+            window.location.href = "{{ url('admin/venta') }}";
         }
 
         function registrardata(data) {
+            let token = document.getElementsByName("_token")[0].value;
             var dataForm = {
                 id_prod: data.id,
                 cantidad: data.cantidad,
                 precio: data.precio,
-                num_boleta: data.num_boleta
+                num_boleta: data.num_boleta,
+                _token: token
             }
             console.log(dataForm);
-            //   $.ajax({
-            //       url: "{{ url('insert/detalle') }}",
-            //       type: "POST",
-            //       data: dataForm,
-            //       success: function(data) {
-            //           console.log(data);
-            //       },
-            //       error: function(data) {
-            //           console.log("error"+data)
-            //       }
-            //   })
+                $.ajax({
+                    url: "{{ url('admin/venta/update/detalle') }}",
+                    type: "POST",
+                    data: dataForm,
+                    success: function(data) {
+                        console.log(data);
+                    },
+                    error: function(data) {
+                        console.log("error"+data)
+                    }
+                })
         }
 
         function mostrarPrecio(data) {

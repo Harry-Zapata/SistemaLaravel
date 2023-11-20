@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\boletaController;
 use App\Http\Controllers\cargoController;
 use App\Http\Controllers\categoriaController;
 use App\Http\Controllers\clienteController;
@@ -70,7 +71,8 @@ Route::prefix('admin/venta')->group(function () {
     Route::get('', [ventaController::class, 'index']);
     Route::post('/insert', [ventaController::class, 'store']);
     Route::get('/insert/{id}', [ventaController::class, 'show']);
-    Route::get('/edit/{id}', [ventaController::class, 'edit']);
-    Route::post('/insert/detalle', [ventaController::class, 'update']);
-    Route::get('/delete/{id}', [ventaController::class, 'destroy']);
+    Route::post('/update/detalle', [ventaController::class, 'update']);
+});
+Route::prefix('admin/boleta')->group(function () {
+    Route::get('', [boletaController::class, 'index']);
 });

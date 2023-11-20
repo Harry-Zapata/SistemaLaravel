@@ -346,6 +346,11 @@ return [
             'text' => 'Venta',
             'url'  => 'admin/venta',
             'icon' => 'fas fa-fw fa-shopping-cart',
+        ],
+        [
+            'text' => 'Boleta',
+            'url'  => 'admin/boleta',
+            'icon' => 'fas fa-fw fa-file',
         ]
     ],
 
