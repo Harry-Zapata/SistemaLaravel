@@ -43,11 +43,14 @@ class ventaController extends Controller
         $detalleBoleta = detalleBoleta::where('num_boleta', $boleta->id)->get();
         return view('admin.venta.update', compact('boleta', 'producto', 'cliente', 'empleado', 'detalleBoleta'));
     }
-    public function edit()
+    public function update(Request $request)
     {
-    }
-    public function update()
-    {
+        $detalleBoleta = new detalleBoleta();
+        $detalleBoleta->num_boleta = $request->input('num_boleta');
+        $detalleBoleta->id_prod = $request->input('id_prod');
+        $detalleBoleta->cantidad = $request->input('cantidad');
+        $detalleBoleta->precio = $request->input('precio');
+        $detalleBoleta->save();
     }
     public function destroy()
     {

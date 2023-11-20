@@ -71,6 +71,6 @@ Route::prefix('admin/venta')->group(function () {
     Route::post('/insert', [ventaController::class, 'store']);
     Route::get('/insert/{id}', [ventaController::class, 'show']);
     Route::get('/edit/{id}', [ventaController::class, 'edit']);
-    Route::post('/update/{id}', [ventaController::class, 'update']);
+    Route::post('/insert/detalle', [ventaController::class, 'update']);
     Route::get('/delete/{id}', [ventaController::class, 'destroy']);
 });
