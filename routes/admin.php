@@ -75,4 +75,5 @@ Route::prefix('admin/venta')->group(function () {
 });
 Route::prefix('admin/boleta')->group(function () {
     Route::get('', [boletaController::class, 'index']);
+    Route::get('/show/{id}/generateInvoice', [boletaController::class, 'show'])->name('boleta.invoice');
 });

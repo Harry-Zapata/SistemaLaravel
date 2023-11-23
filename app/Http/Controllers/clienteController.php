@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\cliente;
 use App\Models\distrito;
+
 class clienteController extends Controller
 {
     public function index()
@@ -27,14 +28,18 @@ class clienteController extends Controller
     public function store(Request $request)
     {
         $cliente = new cliente();
-        $cliente -> nombres = $request ->input('nombres');
-        $cliente -> apellidos = $request ->input('apellidos');
-        $cliente -> direccion = $request ->input('direccion');
-        $cliente -> telefono = $request ->input('telefono');
-        $cliente -> email = $request ->input('email');
-        $cliente -> id_distrito = $request ->input('id_distrito');
-        $cliente -> save();
-        return redirect('admin/cliente')->with('success', 'cliente created successfully');
+        $cliente->nombres = $request->input('nombres');
+        $cliente->apellidos = $request->input('apellidos');
+        $cliente->direccion = $request->input('direccion');
+        $cliente->telefono = $request->input('telefono');
+        $cliente->email = $request->input('email');
+        $cliente->id_distrito = $request->input('id_distrito');
+        try {
+            $cliente->save();
+            return redirect('admin/cliente')->with('success', 'cliente creado correctamente');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect('admin/cliente')->with('error', 'no se puede crear el cliente');
+        }
     }
 
     public function show($id)
@@ -54,18 +59,22 @@ class clienteController extends Controller
     public function update(Request $request, $id)
     {
         $cliente = cliente::find($id);
-        $cliente -> nombres = $request ->input('nombres');
-        $cliente -> apellidos = $request ->input('apellidos');
-        $cliente -> direccion = $request ->input('direccion');
-        $cliente -> telefono = $request ->input('telefono');
-        $cliente -> email = $request ->input('email');
-        $cliente -> id_distrito = $request ->input('id_distrito');
-        $cliente -> save();
-        return redirect('admin/cliente')->with('success', 'cliente updated successfully');
+        $cliente->nombres = $request->input('nombres');
+        $cliente->apellidos = $request->input('apellidos');
+        $cliente->direccion = $request->input('direccion');
+        $cliente->telefono = $request->input('telefono');
+        $cliente->email = $request->input('email');
+        $cliente->id_distrito = $request->input('id_distrito');
+        try{
+        $cliente->save();
+        return redirect('admin/cliente')->with('success', 'cliente actualizado correctamente');
+        }
+        catch (\Illuminate\Database\QueryException $e) {
+            return redirect('admin/cliente')->with('error', 'no se puede actualizar el cliente');
+        }
     }
 
     public function destroy($id)
     {
-
     }
 }

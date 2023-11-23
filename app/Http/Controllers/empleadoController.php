@@ -47,9 +47,9 @@ class empleadoController extends Controller
         $empleado->cod_cargo = $request->input('cod_cargo');
         try {
             $empleado->save();
-            return redirect('admin/empleado')->with('success', 'empleado created successfully');
+            return redirect('admin/empleado')->with('success', 'empleado creado exitosamente');
         } catch (\Illuminate\Database\QueryException $e) {
-            return redirect('admin/empleado')->with('error', 'empleado with the same name already exists');
+            return redirect('admin/empleado')->with('error', 'no se puede crear el empleado');
         }
     }
 
@@ -84,8 +84,13 @@ class empleadoController extends Controller
         $empleados->fecha_ingreso = $request->input('fecha_ingreso');
         $empleados->id_distrito = $request->input('id_distrito');
         $empleados->cod_cargo = $request->input('cod_cargo');
-        $empleados->save();
-        return redirect('admin/empleado')->with('success', 'empleado updated successfully');
+        try {
+            $empleados->save();
+            return redirect('admin/empleado')->with('success', 'empleado actualizado exitosamente');
+        }
+        catch (\Illuminate\Database\QueryException $e) {
+            return redirect('admin/empleado')->with('error', 'no se puede actualizar el empleado');
+        }
     }
 
     public function destroy($id)

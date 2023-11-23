@@ -20,10 +20,28 @@
                 <x-adminlte-input name="dni_empleado" label="DNI" type="text" placeholder="DNI del empleado" />
 
                 <x-adminlte-input name="direccion" label="Direccion" type="text" placeholder="Direccion del empleado" />
-                <x-adminlte-input name="estado_civil" label="Estado Civil" type="text"
-                    placeholder="Estado Civil del empleado" />
-                <x-adminlte-input name="nivel_educacion" label="Educacion" type="text"
-                    placeholder="Educacion del empleado" />
+
+                {{-- <x-adminlte-input name="estado_civil" label="Estado Civil" type="text"
+                    placeholder="Estado Civil del empleado" /> --}}
+                <x-adminlte-select2 name="estado_civil" label="Estado Civil" igroup-size="lg" data-placeholder="Select an option...">
+                    <option />
+                    <option value="Soltero">Soltero</option>
+                    <option value="Casado">Casado</option>
+                    <option value="Divorciado">Divorciado</option>
+                    <option value="Viudo">Viudo</option>
+                </x-adminlte-select2>
+                {{-- <x-adminlte-input name="nivel_educacion" label="Educacion" type="text"
+                    placeholder="Educacion del empleado" /> --}}
+                <x-adminlte-select2 name="nivel_educacion" label="Educacion" igroup-size="lg" data-placeholder="Select an option...">
+                    <option />
+                    <option value="Preescolar">Inicial</option>
+                    <option value="Primaria">Primaria</option>
+                    <option value="Secundaria">Secundaria</option>
+                    <option value="Superior">Superior Tecnica</option>
+                    <option value="Universitario">Universitario</option>
+                    <option value="Posgrado">Posgrado</option>
+                    <option value="Doctorado">Doctorado</option>
+                </x-adminlte-select2>
                 <x-adminlte-input name="telefono" label="Telefono" type="tel" placeholder="Telefono del empleado" />
 
                 <x-adminlte-input name="email" label="Email" type="mail" placeholder="Email del empleado" />

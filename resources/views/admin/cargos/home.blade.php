@@ -7,6 +7,15 @@
         <h1>Cargos</h1>
         <a class="btn btn-primary" href="cargo/create">Crear Cargo</a>
     </div>
+    @if (session('success'))
+        <div class="alert alert-success mt-4" id="alert">
+            {{ session('success') }}
+        </div>
+    @elseif (session('error'))
+        <div class="alert alert-danger mt-4" id="alert">
+            {{ session('error') }}
+        </div>
+    @endif
 @stop
 
 @section('content')
@@ -68,6 +77,13 @@
                 }
             }
             table1_info.textContent = array.join(' ');
+        })
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#alert").fadeTo(2000, 500).slideUp(500, function() {
+                $("#alert").slideUp(500);
+            })
         })
     </script>
 @stop

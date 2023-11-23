@@ -23,10 +23,10 @@ class distritoController extends Controller
         $distritos->nombre_distrito = $request->nombre_distrito;
         try {
             $distritos->save();
-            return redirect('admin/distrito')->with('success', 'distritos created successfully');
+            return redirect('admin/distrito')->with('success', 'distritos creado exitosamente');
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->errorInfo[1] == 1062) { // Check for unique constraint violation
-                return redirect('admin/distrito')->with('error', 'distritos with the same name already exists');
+                return redirect('admin/distrito')->with('error', 'distritos ya existe, no se puede crear');
             }
         }
         // return redirect('admin/distritos');
@@ -48,8 +48,15 @@ class distritoController extends Controller
     {
         $distritos = distrito::find($id);
         $distritos->nombre_distrito = $request->input('nombre_distrito');
-        $distritos->save();
-        return redirect('admin/distrito')->with('success', 'distritos updated successfully');
+        try {
+            $distritos->save();
+            return redirect('admin/distrito')->with('success', 'distritos actualizado exitosamente');
+        }
+        catch (\Illuminate\Database\QueryException $e) {
+            if ($e->errorInfo[1] == 1062) { // Check for unique constraint violation
+                return redirect('admin/distrito')->with('error', 'distritos ya existe, no se puede actualizar');
+            }
+        }
     }
 
 }

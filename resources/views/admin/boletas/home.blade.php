@@ -16,9 +16,7 @@
         $data = array_map(function ($row) {
             $row[3] =
                 '<nobr>' .
-                '<a href="cargo/edit/' .
-                json_encode($row['id']) .
-                '" title="Edit">
+                '<a href="boleta/show/' . $row['id'] . '/generateInvoice" target="_blank">
                     Ver Detalle de Boleta
                 </a>' .
                 '</nobr>';

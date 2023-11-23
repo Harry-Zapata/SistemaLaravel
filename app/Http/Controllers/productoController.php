@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Producto;
 use App\Models\Categoria;
+
 class productoController extends Controller
 {
     public function index()
@@ -32,8 +33,14 @@ class productoController extends Controller
         $producto->stock_minimo = $request->input('stock_minimo');
         $producto->stock_actual = $request->input('stock_actual');
         $producto->cod_categoria = $request->input('cod_categoria');
-        $producto->save();
-        return redirect('admin/producto')->with('success', 'producto created successfully');
+        try {
+            $producto->save();
+            return redirect('admin/producto')->with('success', 'producto creado exitosamente');
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->errorInfo[1] == 1062) { // Check for unique constraint violation
+                return redirect('admin/producto')->with('error', 'El producto ya existe, no se puede crear');
+            }
+        }
     }
 
     public function show($id)
@@ -58,12 +65,18 @@ class productoController extends Controller
         $producto->stock_minimo = $request->input('stock_minimo');
         $producto->stock_actual = $request->input('stock_actual');
         $producto->cod_categoria = $request->input('cod_categoria');
-        $producto->save();
-        return redirect('admin/producto')->with('success', 'producto updated successfully');
+        try {
+            $producto->save();
+            return redirect('admin/producto')->with('success', 'producto actualizado exitosamente');
+        }
+        catch (\Illuminate\Database\QueryException $e) {
+            if ($e->errorInfo[1] == 1062) { // Check for unique constraint violation
+                return redirect('admin/producto')->with('error', 'El producto ya existe, no se puede actualizar');
+            }
+        }
     }
 
     public function destroy($id)
     {
-
     }
 }

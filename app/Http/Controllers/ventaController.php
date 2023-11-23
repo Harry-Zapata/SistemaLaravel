@@ -31,7 +31,7 @@ class ventaController extends Controller
         $id_boleta = $boleta->id;
         $boleta = boleta::find($id_boleta);
 
-        return redirect('admin/venta/insert/'.$boleta->id.'')->with('success', 'boleta created successfully');
+        return redirect('admin/venta/insert/'.$boleta->id.'')->with('success', 'boleta creada exitosamente');
 
     }
     public function show($id)

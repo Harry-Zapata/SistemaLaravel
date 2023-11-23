@@ -5,8 +5,17 @@
 @section('content_header')
     <div class="d-flex justify-content-between">
         <h1>Distritos</h1>
-    <a class="btn btn-primary" href="distrito/create">Crear Cargo</a>
+        <a class="btn btn-primary" href="distrito/create">Crear Cargo</a>
     </div>
+    @if (session('success'))
+        <div class="alert alert-success mt-4" id="alert">
+            {{ session('success') }}
+        </div>
+    @elseif (session('error'))
+        <div class="alert alert-danger mt-4" id="alert">
+            {{ session('error') }}
+        </div>
+    @endif
 @stop
 
 @section('content')
@@ -52,23 +61,30 @@
 @stop
 
 @section('js')
-<script>
-    $(document).ready(function() {
-        let table1_info = document.getElementById('table1_info');
-        let array = table1_info.textContent.split(' ');
-        console.log(array);
-        diccionario = {
-            'Showing': 'Mostrando',
-            'to': 'a',
-            'of': 'de',
-            'entries': 'registros',
-        }
-        for (let i = 0; i < array.length; i++) {
-            if (array[i] in diccionario) {
-                array[i] = diccionario[array[i]];
+    <script>
+        $(document).ready(function() {
+            let table1_info = document.getElementById('table1_info');
+            let array = table1_info.textContent.split(' ');
+            console.log(array);
+            diccionario = {
+                'Showing': 'Mostrando',
+                'to': 'a',
+                'of': 'de',
+                'entries': 'registros',
             }
-        }
-        table1_info.textContent = array.join(' ');
-    })
-</script>
+            for (let i = 0; i < array.length; i++) {
+                if (array[i] in diccionario) {
+                    array[i] = diccionario[array[i]];
+                }
+            }
+            table1_info.textContent = array.join(' ');
+        })
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#alert").fadeTo(2000, 500).slideUp(500, function() {
+                $("#alert").slideUp(500);
+            })
+        })
+    </script>
 @stop

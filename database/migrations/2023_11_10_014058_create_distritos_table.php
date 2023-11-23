@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('distritos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre_distrito');
+            $table->string('nombre_distrito')->unique();
         });
     }
 

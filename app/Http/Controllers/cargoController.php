@@ -25,10 +25,10 @@ class cargoController extends Controller
         $cargo->nombre_cargo = $request->cargo;
         try {
             $cargo->save();
-            return redirect('admin/cargo')->with('success', 'Cargo created successfully');
+            return redirect('admin/cargo')->with('success', 'Cargo creado exitosamente');
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->errorInfo[1] == 1062) { // Check for unique constraint violation
-                return redirect('admin/cargo')->with('error', 'Cargo with the same name already exists');
+                return redirect('admin/cargo')->with('error', 'El cargo ya existe, no se puede crear');
             }
         }
         // return redirect('admin/cargo');
@@ -50,12 +50,17 @@ class cargoController extends Controller
     {
         $cargo = cargo::find($id);
         $cargo->nombre_cargo = $request->input('nombre_cargo');
-        $cargo->save();
-        return redirect('admin/cargo')->with('success', 'Cargo updated successfully');
+        try {
+            $cargo->save();
+            return redirect('admin/cargo')->with('success', 'Cargo actualizado exitosamente');
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->errorInfo[1] == 1062) { // Check for unique constraint violation
+                return redirect('admin/cargo')->with('error', 'El cargo ya existe, no se puede actualizar');
+            }
+        }
     }
 
     public function destroy($id)
     {
-
     }
 }

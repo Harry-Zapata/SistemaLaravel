@@ -6,7 +6,11 @@ use App\Models\boleta;
 use App\Models\cliente;
 use App\Models\detalleBoleta;
 use App\Models\empleado;
+use App\Models\producto;
 use Illuminate\Http\Request;
+use LaravelDaily\Invoices\Invoice;
+use LaravelDaily\Invoices\Classes\Buyer;
+use LaravelDaily\Invoices\Classes\InvoiceItem;
 
 class boletaController extends Controller
 {
@@ -17,40 +21,96 @@ class boletaController extends Controller
         $empleado = empleado::all();
         $boletas = $boletas->map(function ($boletas) use ($clientes, $empleado) {
             $boletas->estado_boleta = $boletas->estado_boleta ? 'Pagada' : 'Pendiente';
-            $boletas->cliente_id = $clientes->find($boletas->cliente_id)->nombres. ' ' . $clientes->find($boletas->cliente_id)->apellidos;
-            $boletas->cod_empleado = $empleado->find($boletas->cod_empleado)->nombres. ' ' . $empleado->find($boletas->cod_empleado)->apellidos;
+            $boletas->cliente_id = $clientes->find($boletas->cliente_id)->nombres . ' ' . $clientes->find($boletas->cliente_id)->apellidos;
+            $boletas->cod_empleado = $empleado->find($boletas->cod_empleado)->nombres . ' ' . $empleado->find($boletas->cod_empleado)->apellidos;
             return $boletas;
         });
         return view('admin.boletas.home', compact('boletas'));
     }
 
-    public function create()
-    {
+    // public function show($id)
+    // {
+    //     $boleta = boleta::find($id);
+    //     $clientes = cliente::all();
+    //     $empleado = empleado::all();
+    //     $productos = producto::all();
+    //     $detalle = detalleBoleta::where('num_boleta', $boleta->id)->get();
+    //     $customer = new Buyer([
+    //         'name'          => $clientes->find($boleta->cliente_id)->nombres . ' ' . $clientes->find($boleta->cliente_id)->apellidos,
+    //         'custom_fields' => [
+    //             'email' => $clientes->find($boleta->cliente_id)->email,
+    //         ],
+    //     ]);
+    //     $seller = new Buyer([
+    //         'name'          => $empleado->find($boleta->cod_empleado)->nombres . ' ' . $empleado->find($boleta->cod_empleado)->apellidos,
+    //         'custom_fields' => [
+    //             'email' => $empleado->find($boleta->cod_empleado)->email,
+    //         ],
+    //     ]);
 
-    }
+    //       foreach ($detalle as $value) {
+    //           $items[] = new InvoiceItem([
+    //               'title' => $productos->find($value->id_prod)->descripcion,
+    //               'quantity'    => $value->cantidad,
+    //               'price'       => $value->precio,
+    //           ]);
+    //       }
 
-    public function store(Request $request)
-    {
+    //       dd($items);
 
-    }
+    //     $invoice = Invoice::make()
+    //         ->buyer($customer)
+    //         ->serialNumberFormat($id)
+    //         ->seller($seller)
+    //         ->taxRate(15)
+    //         ->currencySymbol('S/')
+    //         ->currencyCode('PEN')
+    //         ->addItems($items);
 
+    //     return $invoice->stream();
+    // }
     public function show($id)
     {
+        $boleta = boleta::find($id);
+        $clientes = cliente::all();
+        $empleado = empleado::all();
+        $productos = producto::all();
+        $detalle = detalleBoleta::where('num_boleta', $boleta->id)->get();
 
-    }
+        $customer = new Buyer([
+            'name'          => $clientes->find($boleta->cliente_id)->nombres . ' ' . $clientes->find($boleta->cliente_id)->apellidos,
+            'custom_fields' => [
+                'email' => $clientes->find($boleta->cliente_id)->email,
+            ],
+        ]);
 
-    public function edit($id)
-    {
+        $seller = new Buyer([
+            'name'          => $empleado->find($boleta->cod_empleado)->nombres . ' ' . $empleado->find($boleta->cod_empleado)->apellidos,
+            'custom_fields' => [
+                'email' => $empleado->find($boleta->cod_empleado)->email,
+            ],
+        ]);
 
-    }
+        $items = [];
 
-    public function update(Request $request, $id)
-    {
+        foreach ($detalle as $value) {
+            $product = $productos->find($value->id_prod);
 
-    }
+            $items[] = (new InvoiceItem())
+                ->title($product->descripcion)
+                ->pricePerUnit($value->precio)
+                ->quantity($value->cantidad);
+        }
 
-    public function destroy($id)
-    {
+        $invoice = Invoice::make()
+            ->buyer($customer)
+            ->seller($seller)
+            ->addItems($items)
+            ->serialNumberFormat($id)
+            ->taxRate(0) // Ajusta el porcentaje de impuestos según tu lógica
+            ->currencySymbol('S/') // Símbolo de moneda
+            ->currencyCode('PEN'); // Código de moneda
 
+        return $invoice->stream();
     }
 }
