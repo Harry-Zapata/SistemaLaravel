@@ -19,56 +19,22 @@ class boletaController extends Controller
         $boletas = boleta::all();
         $clientes = cliente::all();
         $empleado = empleado::all();
+        $detalle = detalleBoleta::all();
         $boletas = $boletas->map(function ($boletas) use ($clientes, $empleado) {
-            $boletas->estado_boleta = $boletas->estado_boleta ? 'Pagada' : 'Pendiente';
+            //$boletas->estado_boleta = $boletas->estado_boleta ? 'Pagada' : 'Pendiente';
             $boletas->cliente_id = $clientes->find($boletas->cliente_id)->nombres . ' ' . $clientes->find($boletas->cliente_id)->apellidos;
             $boletas->cod_empleado = $empleado->find($boletas->cod_empleado)->nombres . ' ' . $empleado->find($boletas->cod_empleado)->apellidos;
+
+            // Verificar si hay detalles para la boleta
+            $detallesCount = DetalleBoleta::where('num_boleta', $boletas->id)->count();
+
+            // Agregar propiedad anulado según la cantidad de detalles
+            $boletas->estado_boleta = $detallesCount == 0 ? 'Anulada' : 'Pagada';
             return $boletas;
         });
         return view('admin.boletas.home', compact('boletas'));
     }
 
-    // public function show($id)
-    // {
-    //     $boleta = boleta::find($id);
-    //     $clientes = cliente::all();
-    //     $empleado = empleado::all();
-    //     $productos = producto::all();
-    //     $detalle = detalleBoleta::where('num_boleta', $boleta->id)->get();
-    //     $customer = new Buyer([
-    //         'name'          => $clientes->find($boleta->cliente_id)->nombres . ' ' . $clientes->find($boleta->cliente_id)->apellidos,
-    //         'custom_fields' => [
-    //             'email' => $clientes->find($boleta->cliente_id)->email,
-    //         ],
-    //     ]);
-    //     $seller = new Buyer([
-    //         'name'          => $empleado->find($boleta->cod_empleado)->nombres . ' ' . $empleado->find($boleta->cod_empleado)->apellidos,
-    //         'custom_fields' => [
-    //             'email' => $empleado->find($boleta->cod_empleado)->email,
-    //         ],
-    //     ]);
-
-    //       foreach ($detalle as $value) {
-    //           $items[] = new InvoiceItem([
-    //               'title' => $productos->find($value->id_prod)->descripcion,
-    //               'quantity'    => $value->cantidad,
-    //               'price'       => $value->precio,
-    //           ]);
-    //       }
-
-    //       dd($items);
-
-    //     $invoice = Invoice::make()
-    //         ->buyer($customer)
-    //         ->serialNumberFormat($id)
-    //         ->seller($seller)
-    //         ->taxRate(15)
-    //         ->currencySymbol('S/')
-    //         ->currencyCode('PEN')
-    //         ->addItems($items);
-
-    //     return $invoice->stream();
-    // }
     public function show($id)
     {
         $boleta = boleta::find($id);

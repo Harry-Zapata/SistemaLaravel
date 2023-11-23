@@ -68,15 +68,18 @@ class productoController extends Controller
         try {
             $producto->save();
             return redirect('admin/producto')->with('success', 'producto actualizado exitosamente');
-        }
-        catch (\Illuminate\Database\QueryException $e) {
+        } catch (\Illuminate\Database\QueryException $e) {
             if ($e->errorInfo[1] == 1062) { // Check for unique constraint violation
                 return redirect('admin/producto')->with('error', 'El producto ya existe, no se puede actualizar');
             }
         }
     }
 
-    public function destroy($id)
+
+    public function disminuir(Request $request, $id)
     {
+        $producto = Producto::find($id);
+        $producto->stock_actual = $producto->stock_actual - $request->input('stock_actual');
+        $producto->save();
     }
 }

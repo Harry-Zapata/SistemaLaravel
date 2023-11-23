@@ -15,11 +15,15 @@
         $data = $boletas->toArray();
         $data = array_map(function ($row) {
             $row[3] =
-                '<nobr>' .
-                '<a href="boleta/show/' . $row['id'] . '/generateInvoice" target="_blank">
-                    Ver Detalle de Boleta
-                </a>' .
-                '</nobr>';
+                $row['estado_boleta'] == 'Pagada'
+                    ? '<nobr>' .
+                        '<a href="boleta/show/' .
+                        $row['id'] .
+                        '/generateInvoice" target="_blank">
+            Ver Detalle de Boleta
+        </a>' .
+                        '</nobr>'
+                    : '<nobr>' . '<span class="text-danger">No Existe Detalle</span>' . '</nobr>';
             return $row;
         }, $data);
         $config = [
@@ -43,5 +47,4 @@
 @stop
 
 @section('js')
-
 @stop

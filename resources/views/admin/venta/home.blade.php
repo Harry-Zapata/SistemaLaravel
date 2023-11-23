@@ -6,6 +6,15 @@
     <div class="d-flex justify-content-between">
         <h1>Ventas</h1>
     </div>
+    @if (session('success'))
+        <div class="alert alert-success mt-4" id="alert">
+            {{ session('success') }}
+        </div>
+    @elseif (session('error'))
+        <div class="alert alert-danger mt-4" id="alert">
+            {{ session('error') }}
+        </div>
+    @endif
 @stop
 
 @section('content')
@@ -25,7 +34,7 @@
             @endforeach
         </x-adminlte-select2>
         <div>
-            <x-adminlte-button class="btn btn-success w-100" type="submit" label="Generar Boleta" theme="primary" />
+            <x-adminlte-button class="btn btn-success w-100" type="submit" label="Nueva Venta" theme="primary" />
         </div>
     </form>
     <form action="{{ url('admin/venta/insert') }}" method="POST" class="form-2">
@@ -47,12 +56,11 @@
     @php
         $heads = ['Producto', 'cantidad', 'precio', ['label' => 'Actions', 'no-export' => true, 'width' => 5]];
     @endphp
-    <x-adminlte-datatable id="table1" head-theme="light" :heads="$heads" striped hoverable bordered/>
+    <x-adminlte-datatable id="table1" head-theme="light" :heads="$heads" striped hoverable bordered />
 
 @stop
 
 @section('css')
-
     <style>
         form {
             display: grid;
@@ -74,6 +82,10 @@
 
 @section('js')
     <script>
-        console.log('Hi!');
+        $(document).ready(function() {
+            $("#alert").fadeTo(2000, 500).slideUp(500, function() {
+                $("#alert").slideUp(500);
+            })
+        })
     </script>
 @stop

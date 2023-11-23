@@ -70,7 +70,6 @@
         $(document).ready(function() {
             let table1_info = document.getElementById('table1_info');
             let array = table1_info.textContent.split(' ');
-            console.log(array);
             diccionario = {
                 'Showing': 'Mostrando',
                 'to': 'a',

@@ -27,11 +27,14 @@ class ventaController extends Controller
         $boleta->estado_boleta = true;
         $boleta->cliente_id = $request->input('id_cliente');
         $boleta->cod_empleado = $request->input('cod_emple');
-        $boleta->save();
-        $id_boleta = $boleta->id;
-        $boleta = boleta::find($id_boleta);
-
-        return redirect('admin/venta/insert/'.$boleta->id.'')->with('success', 'boleta creada exitosamente');
+        try{
+            $boleta->save();
+            $id_boleta = $boleta->id;
+            $boleta = boleta::find($id_boleta);
+            return redirect('admin/venta/insert/'.$boleta->id.'')->with('success', 'boleta creada exitosamente');
+        }catch(\Exception $e){
+            return redirect('admin/venta')->with('error', 'No se pudo crear la boleta');
+        }
 
     }
     public function show($id)

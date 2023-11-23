@@ -37,7 +37,7 @@
     </form>
     <form class="form-2">
         @csrf
-        <x-adminlte-select2 oninput="mostrarPrecio({{ $producto }})" name="id_producto" label="Producto"
+        <x-adminlte-select2 oninput="mostrarPrecio({{ $producto }})" name="id_producto" id="id_producto" label="Producto"
             igroup-size="lg" data-placeholder="Select an option...">
             <option />
             @foreach ($producto as $producto)
@@ -69,7 +69,7 @@
         <div class="btn btn-warning w-25 d-flex justify-content-between">
             Total : <span id="total">0</span>
         </div>
-        <x-adminlte-button class="btn btn-success w-25" onclick="registrar()" label="Registrar" theme="primary" />
+        <x-adminlte-button id="btnRegistrar" class="btn btn-success w-25" onclick="registrar()" label="Registrar" theme="primary" />
     </div>
 @stop
 
@@ -156,17 +156,20 @@
         function agregar() {
             if (!checarFormulario()) {
                 alert('Todos los campos son obligatorios');
+                limpiarForm();
                 return;
             }
             let stock_actual = document.getElementById('cantidad_stock').textContent;
             let cantidad_actual = document.getElementsByName('cantidad')[0].value;
             if (parseInt(stock_actual) < parseInt(cantidad_actual)) {
                 alert('No hay suficiente stock');
+                limpiarForm();
                 return;
             }
             for (let i = 0; i < data.length; i++) {
                 if (data[i].id == document.getElementsByName('id_producto')[0].value) {
                     alert('Ya se agrego el producto');
+                    limpiarForm();
                     return;
                 }
             }
@@ -186,8 +189,17 @@
             data.push(producto);
             verificar();
             total();
+            limpiarForm();
         }
+        function limpiarForm() {
+            $('#id_producto').val(null).trigger('change.select2');
+            document.getElementsByName('precio')[0].value = "";
+            document.getElementsByName('cantidad')[0].value = "";
+            document.getElementsByName('id_producto')[0].focus();
+            document.getElementsByName('cantidad')[0].placeholder="Cantidad de productos";
+            document.getElementById("stock_actual").innerHTML=""
 
+        }
         function borrar(i) {
             data.splice(i, 1);
             verificar();
@@ -217,12 +229,19 @@
 
         function registrar() {
             //que espere a que acabe el bucle y que muestre una alerta que se guardaron los datos correctamente
+            let btnRegistrar = document.getElementById('btnRegistrar');
+            btnRegistrar.disabled = true;
             for (let i = 0; i < data.length; i++) {
                 let element = data[i];
                 registrardata(element);
             }
+
             //que redireccione al admin/venta
-            window.location.href = "{{ url('admin/venta') }}";
+            let urlBoleta = "{{url('admin/boleta/show/:id/generateInvoice')}}".replace(":id",document.getElementById("num_boleta").textContent);
+            //que abra la boleta en una nueva pestaña
+            window.open(urlBoleta, '_blank');
+            //que redireccione al admin/boleta
+            window.location.href = "{{url('admin/venta')}}";
         }
 
         function registrardata(data) {
@@ -234,18 +253,38 @@
                 num_boleta: data.num_boleta,
                 _token: token
             }
-            console.log(dataForm);
-                $.ajax({
-                    url: "{{ url('admin/venta/update/detalle') }}",
-                    type: "POST",
-                    data: dataForm,
-                    success: function(data) {
-                        console.log(data);
-                    },
-                    error: function(data) {
-                        console.log("error"+data)
-                    }
-                })
+              $.ajax({
+                  url: "{{ url('admin/venta/update/detalle') }}",
+                  type: "POST",
+                  data: dataForm,
+                  success: function(data) {
+                    // console.log("exito");
+                  },
+                  error: function(data) {
+                    // console.log("error");
+                  }
+              })
+            disminuirStockDeProducto(data);
+        }
+        function disminuirStockDeProducto(data) {
+            let token = document.getElementsByName("_token")[0].value;
+            var dataForm = {
+                id_prod: data.id,
+                stock_actual:data.cantidad,
+                _token: token
+            }
+            let url = "{{ url('/admin/producto/disminuir/:id') }}".replace(':id', data.id);
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: dataForm,
+                success: function(data) {
+                    // console.log("exito");
+                }
+                , error: function(data) {
+                    // console.log("error");
+                }
+            })
         }
 
         function mostrarPrecio(data) {

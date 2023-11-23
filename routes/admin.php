@@ -9,6 +9,7 @@ use App\Http\Controllers\empleadoController;
 use App\Http\Controllers\principalController;
 use App\Http\Controllers\productoController;
 use App\Http\Controllers\ventaController;
+use App\Models\producto;
 use Illuminate\Support\Facades\Route;
 
 Route::get('', [principalController::class, 'index']);
@@ -56,6 +57,7 @@ Route::prefix('/admin/producto')->group(function () {
     Route::get('/read/{id}', [productoController::class, 'show']);
     Route::get('/edit/{id}', [productoController::class, 'edit']);
     Route::post('/update/{id}', [productoController::class, 'update']);
+    Route::post('/disminuir/{id}', [productoController::class, 'disminuir']);
     Route::get('/delete/{id}', [productoController::class, 'destroy']);
 });
 Route::prefix('/admin/categoria')->group(function () {
@@ -77,3 +79,4 @@ Route::prefix('admin/boleta')->group(function () {
     Route::get('', [boletaController::class, 'index']);
     Route::get('/show/{id}/generateInvoice', [boletaController::class, 'show'])->name('boleta.invoice');
 });
+
