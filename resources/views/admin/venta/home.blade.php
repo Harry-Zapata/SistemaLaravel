@@ -24,13 +24,13 @@
             data-placeholder="Select an option...">
             <option />
             @foreach ($cliente as $cliente)
-                <option value="{{ $cliente->id }}">{{ $cliente->nombres }}</option>
+                <option value="{{ $cliente->id }}">{{ $cliente->nombres . ' ' . $cliente->apellidos }}</option>
             @endforeach
         </x-adminlte-select2>
         <x-adminlte-select2 name="cod_emple" label="Empleado" igroup-size="lg" data-placeholder="Select an option...">
             <option />
             @foreach ($empleado as $empleado)
-                <option value="{{ $empleado->id }}">{{ $empleado->nombres }}</option>
+                <option value="{{ $empleado->id }}">{{ $empleado->nombres . ' ' . $empleado->apellidos }}</option>
             @endforeach
         </x-adminlte-select2>
         <div>
