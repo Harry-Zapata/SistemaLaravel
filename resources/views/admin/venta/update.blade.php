@@ -13,63 +13,71 @@
 @stop
 
 @section('content')
-    <form>
-        <x-adminlte-select2 name="id_cliente" disabled onchange="mostrarPrecio()" class="col-md-6" label="Cliente"
-            igroup-size="lg" data-placeholder="Select an option...">
-            <option />
-            @foreach ($cliente as $cliente)
-                <option value="{{ $cliente->id }}" @if ($boleta->cliente_id == $cliente->id) selected @endif>{{ $cliente->nombres }}
-                </option>
-            @endforeach
-        </x-adminlte-select2>
-        <x-adminlte-select2 name="cod_emple" disabled label="Empleado" igroup-size="lg"
-            data-placeholder="Select an option...">
-            <option />
-            @foreach ($empleado as $empleado)
-                <option value="{{ $empleado->id }}" @if ($boleta->cod_empleado == $empleado->id) selected @endif>
-                    {{ $empleado->nombres }}</option>
-            @endforeach
-        </x-adminlte-select2>
-        <div>
-            <x-adminlte-button class="btn btn-success w-100" disabled type="submit" label="Generar Boleta"
-                theme="primary" />
+    <div class="grilla">
+        <div class="grid1">
+            {{-- <form>
+                <x-adminlte-select2 name="id_cliente" disabled onchange="mostrarPrecio()" class="col-md-6" label="Cliente"
+                    igroup-size="lg" data-placeholder="Select an option...">
+                    <option />
+                    @foreach ($cliente as $cliente)
+                        <option value="{{ $cliente->id }}" @if ($boleta->cliente_id == $cliente->id) selected @endif>
+                            {{ $cliente->nombres }}
+                        </option>
+                    @endforeach
+                </x-adminlte-select2>
+                <x-adminlte-select2 name="cod_emple" disabled label="Empleado" igroup-size="lg"
+                    data-placeholder="Select an option...">
+                    <option />
+                    @foreach ($empleado as $empleado)
+                        <option value="{{ $empleado->id }}" @if ($boleta->cod_empleado == $empleado->id) selected @endif>
+                            {{ $empleado->nombres }}</option>
+                    @endforeach
+                </x-adminlte-select2>
+                <div>
+                    <x-adminlte-button class="btn btn-success w-100" disabled type="submit" label="Generar Boleta"
+                        theme="primary" />
+                </div>
+            </form> --}}
+            <form class="form-2">
+                @csrf
+                <x-adminlte-select2 oninput="mostrarPrecio({{ $producto }})" name="id_producto" id="id_producto"
+                    label="Producto" class="w-100" igroup-size="lg" data-placeholder="Select an option...">
+                    <option />
+                    @foreach ($producto as $producto)
+                        <option value="{{ $producto->id }}">{{ $producto->descripcion }}</option>
+                    @endforeach
+                </x-adminlte-select2>
+                {{-- cuando selecciona el producto debo mostrar el precio --}}
+                <x-adminlte-input name="precio" disabled label="Precio" type="text" placeholder="Precio del Producto" />
+                <x-adminlte-input name="cantidad" label="Cantidad" type="text" placeholder="Cantidad de productos" />
+                <div class="w-100">
+                    <x-adminlte-button class="btn btn-primary w-100" onclick="agregar()" label="Agregar" theme="primary" />
+                </div>
+            </form>
         </div>
-    </form>
-    <form class="form-2">
-        @csrf
-        <x-adminlte-select2 oninput="mostrarPrecio({{ $producto }})" name="id_producto" id="id_producto" label="Producto"
-            igroup-size="lg" data-placeholder="Select an option...">
-            <option />
-            @foreach ($producto as $producto)
-                <option value="{{ $producto->id }}">{{ $producto->descripcion }}</option>
-            @endforeach
-        </x-adminlte-select2>
-        {{-- cuando selecciona el producto debo mostrar el precio --}}
-        <x-adminlte-input name="precio" disabled label="Precio" type="text" placeholder="Precio del Producto" />
-        <x-adminlte-input name="cantidad" label="Cantidad" type="text" placeholder="Cantidad de productos" />
-        <div>
-            <x-adminlte-button class="btn btn-primary w-100" onclick="agregar()" label="Agregar" theme="primary" />
-        </div>
-    </form>
-    @php
-        $data = [];
-    @endphp
-    {{-- Tabla --}}
-    <table class="table table-bordered table-striped" id="table1">
-        <tr class="text-center">
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Precio</th>
-            <th>Acciones</th>
-        </tr>
+        <div class="grid2">
+            @php
+                $data = [];
+            @endphp
+            {{-- Tabla --}}
+            <table class="table table-bordered table-striped" id="table1">
+                <tr class="text-center">
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                </tr>
 
-    </table>
+            </table>
 
-    <div class="d-flex justify-content-between">
-        <div class="btn btn-warning w-25 d-flex justify-content-between">
-            Total : <span id="total">0</span>
+            <div class="d-flex justify-content-between final">
+                <div class="btn btn-warning w-25 d-flex justify-content-between">
+                    Total : <span id="total">0</span>
+                </div>
+                <x-adminlte-button id="btnRegistrar" class="btn btn-success w-25" onclick="registrar()" label="Registrar"
+                    theme="primary" />
+            </div>
         </div>
-        <x-adminlte-button id="btnRegistrar" class="btn btn-success w-25" onclick="registrar()" label="Registrar" theme="primary" />
     </div>
 @stop
 
@@ -94,6 +102,34 @@
 
         td {
             text-align: center;
+        }
+
+        .grilla {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+        }
+
+        .grid1 {
+            grid-column-start: 1;
+            grid-column-end: 3;
+        }
+
+        .grid2 {
+            grid-column-start: 3;
+            grid-column-end: 6;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .form-2 {
+            display: flex;
+            flex-direction: column;
+            margin-right: 50px
+        }
+
+        .form-group {
+            width: 100%;
         }
     </style>
 @stop
@@ -191,15 +227,17 @@
             total();
             limpiarForm();
         }
+
         function limpiarForm() {
             $('#id_producto').val(null).trigger('change.select2');
             document.getElementsByName('precio')[0].value = "";
             document.getElementsByName('cantidad')[0].value = "";
             document.getElementsByName('id_producto')[0].focus();
-            document.getElementsByName('cantidad')[0].placeholder="Cantidad de productos";
-            document.getElementById("stock_actual").innerHTML=""
+            document.getElementsByName('cantidad')[0].placeholder = "Cantidad de productos";
+            document.getElementById("stock_actual").innerHTML = ""
 
         }
+
         function borrar(i) {
             data.splice(i, 1);
             verificar();
@@ -217,9 +255,8 @@
         }
 
         function sumar1(i) {
-            let stock_actual = document.getElementById('cantidad_stock').textContent;
-            if (data[i].cantidad == parseInt(stock_actual)) {
-                alert('Solo tenemos ' + document.getElementById('cantidad_stock').textContent + ' en stock');
+            if (data[i].cantidad == 1) {
+                borrar(i);
                 return;
             }
             data[i].cantidad++;
@@ -237,11 +274,12 @@
             }
 
             //que redireccione al admin/venta
-            let urlBoleta = "{{url('admin/boleta/show/:id/generateInvoice')}}".replace(":id",document.getElementById("num_boleta").textContent);
+            let urlBoleta = "{{ url('admin/boleta/show/:id/generateInvoice') }}".replace(":id", document.getElementById(
+                "num_boleta").textContent);
             //que abra la boleta en una nueva pestaña
             window.open(urlBoleta, '_blank');
             //que redireccione al admin/boleta
-            window.location.href = "{{url('admin/venta')}}";
+            window.location.href = "{{ url('admin/venta') }}";
         }
 
         function registrardata(data) {
@@ -253,24 +291,25 @@
                 num_boleta: data.num_boleta,
                 _token: token
             }
-              $.ajax({
-                  url: "{{ url('admin/venta/update/detalle') }}",
-                  type: "POST",
-                  data: dataForm,
-                  success: function(data) {
+            $.ajax({
+                url: "{{ url('admin/venta/update/detalle') }}",
+                type: "POST",
+                data: dataForm,
+                success: function(data) {
                     // console.log("exito");
-                  },
-                  error: function(data) {
+                },
+                error: function(data) {
                     // console.log("error");
-                  }
-              })
+                }
+            })
             disminuirStockDeProducto(data);
         }
+
         function disminuirStockDeProducto(data) {
             let token = document.getElementsByName("_token")[0].value;
             var dataForm = {
                 id_prod: data.id,
-                stock_actual:data.cantidad,
+                stock_actual: data.cantidad,
                 _token: token
             }
             let url = "{{ url('/admin/producto/disminuir/:id') }}".replace(':id', data.id);
@@ -280,8 +319,8 @@
                 data: dataForm,
                 success: function(data) {
                     // console.log("exito");
-                }
-                , error: function(data) {
+                },
+                error: function(data) {
                     // console.log("error");
                 }
             })
